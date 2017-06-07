@@ -26,5 +26,5 @@ serverConfiguration();
 
 function serverConfiguration() {
     redis.init(config);
-    task.init(db);
+    //task.init(db);
 }

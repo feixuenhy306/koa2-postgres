@@ -16,6 +16,26 @@ exports.initSecured = function(app) {
     app.get("/v1/users", getUsers);
 }
 
+/**
+ * @swagger
+ * /v1/signUp:
+ *      post:
+ *          description: SignUp to the application
+ *          parameters:
+ *              -name:
+ *                  required: true
+ *                  type: string
+ *              -password:
+ *                  required: true
+ *                  type: string
+ *              -email:
+ *                  required: true
+ *                  type: string
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200
+ */
 async function signUp(ctx, next) {
     try {
         let body = ctx.request.body;
@@ -44,6 +64,23 @@ async function signUp(ctx, next) {
     }
 }
 
+/**
+ * @swagger
+ * /v1/signin:
+ *      post:
+ *          description: Sign to the application
+ *          parameters:
+ *              -password:
+ *                  required: true
+ *                  type: string
+ *              -email:
+ *                  required: true
+ *                  type: string
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200
+ */
 async function signIn(ctx, next) {
     try {
         let body = ctx.request.body;
@@ -81,6 +118,20 @@ async function signIn(ctx, next) {
     }
 }
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     description: Returns users
+ *     tags:
+ *      - Users
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: users
+ */
+
 exports.getUsers = getUsers;
 async function getUsers(ctx, next) {
     try {
@@ -105,3 +156,17 @@ async function getUsers(ctx, next) {
         ctx.app.emit('error', err, ctx)
     }
 }
+
+/**
+ * @swagger
+ * definitions:
+ *   Sign:
+ *     required:
+ *       - username
+ *       - password
+ *     properties:
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ */

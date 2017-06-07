@@ -6,6 +6,7 @@ let baseconfig = {
     app: {
         version: 1,
         env: process.env.NODE_ENV,
+        name: 'payment-gatways',
         cors: {
             maxAge: 84600,
             credentials: true,
