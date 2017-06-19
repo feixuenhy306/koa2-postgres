@@ -2,6 +2,7 @@
 let fs = require('fs')
 let pgp = require('pg-promise')();
 let config = require('./../config');
+
 let db = pgp(config.postgres);
 
 fs.readdirSync(__dirname + '/').forEach(function(file) {

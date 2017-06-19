@@ -1,6 +1,6 @@
 'use strict';
 let bcrypt = require('bcrypt-nodejs');
-let pino = require('pino');
+let pino = require('pino')();
 
 exports.getHash = async(pwd) => {
     try {

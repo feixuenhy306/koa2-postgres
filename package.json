@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.1",
-    "bcrypt-nodejs": "latest",
+    "bcrypt-nodejs": "0.0.3",
     "chai": "^4.0.1",
     "chai-http": "^3.0.0",
     "co": "^4.6.0",
@@ -39,7 +39,8 @@
     "redis": "2.7.1",
     "request": "^2.81.0",
     "supertest": "^3.0.0",
-    "swagger-jsdoc": "file:swagger-jsdoc"
+    "swagger-editor": "^3.0.12",
+    "swagger2-koa": "0.0.36"
   },
   "devDependencies": {}
 }

@@ -5,8 +5,8 @@ let db = require('./../model/user'),
     redis = require('./../utils/redis'),
     config = require('./../config'),
     error = require('./../utils/error'),
-    fs = require('fs');
-let swaggerJSDoc = require('swagger-jsdoc');
+    fs = require('fs'),
+    swaggerJSDoc = require('swagger-jsdoc');
 
 exports.initPub = function(app) {
     app.get("/v1/apiDoc", apiDoc);
@@ -25,7 +25,7 @@ var swaggerDefinition = {
 
 var options = {
     swaggerDefinition: swaggerDefinition,
-    apis: ['./controllers/*.js', './controllers/parameters.yaml']
+    apis: ['./controllers/*.js']
 };
 
 var swaggerSpec = swaggerJSDoc(options);

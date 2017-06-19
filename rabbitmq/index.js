@@ -1,30 +1,45 @@
 'use strict';
-let amqp = require('amqplib/callback_api');
 
-exports.init = function(db) {
-    amqp.connect('amqp://localhost', function(err, conn) {
-        if (err) {
-            console.log(err);
-        } else {
-            conn.createChannel(function(err, ch) {
+let amqp = require('amqplib');
+let pino = require('pino')();
+let task = require('./periodicTask');
 
-                if (err) {
-                    console.log(err);
-                } else {
-                    var q = 'task_queue';
+module.exports = init;
 
-                    ch.assertQueue(q, {durable: true});
-                    ch.prefetch(1);
-                    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
-                    ch.consume(q, function(msg) {
-                        var str = msg.content.toString()
+async function init(db){
+    let ch = await rabitConnection(db);
+    task.init(db, ch);
+}
 
-                        console.log("rec",str);
-                    }, {noAck: false});
-                }
+async function rabitConnection(db) {
+    try {
+        let amqpConn = await amqp.connect('amqp://localhost');
 
-            });
-        }
+        amqpConn.on("error", function(err) {
+            if (err.message !== "Connection closing") {
+                pino.error("[AMQP] conn error", err.message);
+                setTimeout(function(){
+                    init(db)
+                }, 100);
+            }
 
-    });
+        }).on("close", function() {
+            pino.error("[AMQP] reconnecting");
+            setTimeout(function(){
+                init(db)
+            }, 100);
+        });
+
+        let channel = await amqpConn.createChannel();
+
+        channel.on('close', function() {
+            pino.error("occuring error in the channel");
+        }).on('error', function(err) {
+            pino.error("server closed this channel ", err);
+        });
+
+        return channel;
+    } catch (err) {
+        pino.error("error in rabbitMQ connectng", err);
+    }
 }

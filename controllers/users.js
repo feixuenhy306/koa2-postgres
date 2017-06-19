@@ -44,17 +44,21 @@ async function signUp(ctx, next) {
         let email = body.email;
         let name = body.name;
         let passwd = body.passwd;
+        if(passwd && (name ||email)) {
+            let data = await db.createUser(name, email, passwd);
+            await redis.deleteKey('users');
 
-        let data = await db.createUser(name, email, passwd);
-        await redis.deleteKey('users');
+            ctx.body = data;
+            var cert = fs.readFileSync(config.app.privateKey)
+            ctx.set('Authorization', " Bearer " + jsonwebtoken.sign({
+                email: email
+            }, cert, {algorithm: 'RS256'}));
 
-        ctx.body = data;
-        var cert = fs.readFileSync(config.app.privateKey)
-        ctx.set('Authorization', " Bearer " + jsonwebtoken.sign({
-            email: email
-        }, cert, {algorithm: 'RS256'}));
-
-        ctx.status = 200;
+            ctx.status = 200;
+        } else {
+            ctx.status = 401;
+            ctx.body = "please share passwd and user info";
+        }
 
     } catch (err) {
         ctx.log.info(err);

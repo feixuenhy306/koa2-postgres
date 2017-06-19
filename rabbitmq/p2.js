@@ -1,12 +1,25 @@
 'use strict';
 
 let cron = require('node-cron');
-let amqp = require('amqplib/callback_api');
-let amqpConn = null;
+let amqp = require('amqplib');
+let pino = require('pino')();
 
 exports.init = async(db) => {
     try {
-        let i = 0;
+        let amqpConn = await amqp.connect('amqp://localhost?heartbeat=160');
+        amqpConn.on("error", function(err) {
+            if (err.message !== "Connection closing") {
+                pino.error("[AMQP] conn error", err.message);
+            }
+        });
+
+        amqpConn.on("close", function() {
+            pino.error("[AMQP] reconnecting");
+            rej(setTimeout(start, 1000));
+        });
+
+        let ch = await amqpConn.createChannel();
+
         let task = cron.schedule('0-59 * * * *', async function() {
             let data = await db.query('select name,email from users');
 
@@ -14,62 +27,34 @@ exports.init = async(db) => {
                 if (!data[i].name)
                     continue;
 
-                amqpConn.createChannel(function(err, ch) {
-                    ch.assertQueue('', {
-                        exclusive: true
-                    }, function(err, q) {
-                        var corr = generateUuid();
+                let q = await ch.assertQueue('', {exclusive: true});
 
-                        ch.consume(q.queue, function(msg) {
-                            if (msg.properties.correlationId === corr) {
-                                let str = msg.content.toString();
-                                console.log(' [.] Got %s', str);
-                                db.query('update users  set name = $1 where email = $2', [str, data[i].email]);
-                            }
-                        }, {noAck: true});
+                var corr = generateUuid();
 
-                        ch.sendToQueue('rpc_queue', new Buffer(data[i].name), {
-                            correlationId: corr,
-                            replyTo: q.queue
-                        });
+                ch.consume(q.queue, function(msg) {
+                    if (msg.properties.correlationId === corr) {
+                        let str = msg.content.toString();
+                        pino.info(' [.] Got %s', str);
+                        db.query('update users  set name = $1 where email = $2', [str, data[i].email]);
+                    }
+                }, {noAck: true});
 
-                    });
+                ch.sendToQueue('rpc_queue', new Buffer(data[i].name), {
+                    correlationId: corr,
+                    replyTo: q.queue
                 });
-
             }
-            console.log('running a task every minute');
+            pino.info('running a task every minute');
         }, true);
 
-        await start(task);
-        console.log("task started!!");
+        task.start();
+        pino.info("task started!!");
 
-    } catch (e) {}
+    } catch (e) {
+        pino.error(e);
+    }
 }
 
 function generateUuid() {
     return Math.random().toString() + Math.random().toString() + Math.random().toString();
-}
-
-function start(task) {
-    return new Promise((res, rej) => {
-        amqp.connect('amqp://localhost', function(err, conn) {
-            if (err) {
-                console.error("[AMQP]", err.message);
-                rej(setTimeout(start, 1000));
-            }
-            conn.on("error", function(err) {
-                if (err.message !== "Connection closing") {
-                    console.error("[AMQP] conn error", err.message);
-                }
-            });
-            conn.on("close", function() {
-                console.error("[AMQP] reconnecting");
-                rej(setTimeout(start, 1000));
-            });
-            task.start();
-            console.log("[AMQP] connected");
-            amqpConn = conn;
-            res(conn);
-        });
-    });
 }

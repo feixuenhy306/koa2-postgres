@@ -1,30 +1,36 @@
 'use strict';
 
-let app = require('./middleware/koa'),
-    config = require('./config'),
+let config = require('./config'),
     redis = require('./utils/redis'),
     db = require('./model'),
     email = require('./utils/email'),
-    task = require('./rabbitmq/p2');
+    task = require('./rabbitmq/periodicTask'),
+    rabbitMQ = require('./rabbitmq'),
+    numCPUs = require('os').cpus().length,
+    pino = require('pino')(),
+    cluster = require('cluster');
 
-process.on('uncaughtException', function(err) {
-    console.log(err);
-    email.sendToAdmin(err);
-})
-
-process.on('uncaughtRejection', function(err) {
-    console.log(err);
-    email.sendToAdmin(err);
-})
-
-process.on('exit', function(code) {
-    console.log('About to exit with code:', code);
-    email.sendToAdmin(code);
-});
+if (cluster.isMaster) {
+    for (var i = 0; i < 1; i++) {
+        cluster.fork();
+    }
+} else {
+    require('./middleware/koa');
+}
 
 serverConfiguration();
 
-function serverConfiguration() {
+async function serverConfiguration() {
     redis.init(config);
-    //task.init(db);
+    rabbitMQ(db);
 }
+
+process.on('uncaughtException', function(err) {
+    pino.error("uncaughtException", err);
+    email.sendToAdmin(err);
+
+}).on('uncaughtRejection', function(err) {
+
+    pino.error("uncaughtRejection: ", err);
+    email.sendToAdmin(err);
+})
