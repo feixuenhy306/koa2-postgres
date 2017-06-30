@@ -14,7 +14,6 @@ async function init(db){
 async function rabitConnection(db) {
     try {
         let amqpConn = await amqp.connect('amqp://localhost');
-
         amqpConn.on("error", function(err) {
             if (err.message !== "Connection closing") {
                 pino.error("[AMQP] conn error", err.message);

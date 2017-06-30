@@ -7,7 +7,7 @@ exports.init = (cursor) => {
         db = cursor;
     //    db.none('CREATE TABLE IF NOT EXISTS  ty(name VARCHAR(50), email VARCHAR(60), passwd VARCHAR(60))');
 
-        db.none('CREATE TABLE IF NOT EXISTS  payment(waybill VARCHAR(50), qrCode BYTEA)');
+        db.none('CREATE TABLE IF NOT EXISTS  payment(waybill VARCHAR(50), qrcode BYTEA)');
     } catch (err) {
         pino.error("error in users model", err.message);
     }

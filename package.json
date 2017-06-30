@@ -1,15 +1,19 @@
 {
-  "name": "paytm",
+  "name": "koa2",
   "version": "1.0.0",
-  "description": "payment getway",
+  "description": "koa2 example",
   "main": "app.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "start": "nodemon app.js | pino"
   },
   "keywords": [
-    "paytm",
-    "payemnt"
+    "koa2",
+    "postgres",
+    "swagger",
+    "redis",
+    "rabbitMQ",
+    "pino"
   ],
   "author": "rishabh",
   "license": "ISC",

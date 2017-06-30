@@ -59,6 +59,7 @@ let platformConfig = {
             name: 'delhivery',
             safe: true
         },
+        sequelizeUri: 'postgres://postgres:newpassword@localhost:5432/paytmuser',
         postgres: {
             host: 'localhost',
             port: 5432,
@@ -82,6 +83,7 @@ let platformConfig = {
             name: 'delhivery',
             safe: true
         },
+        sequelizeUri: 'postgres://postgres:newpassword@localhost:5432/paytmuser',
         postgres: {
             host: 'localhost',
             port: 5432,
