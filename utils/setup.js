@@ -1,5 +1,5 @@
-nginx Setup
-
+/*nginx Setup
+*/
 sudo apt-get install Nginx
 
 cd /etc/nginx/sites-available/
