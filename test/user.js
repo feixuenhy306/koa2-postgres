@@ -1,20 +1,14 @@
-var chai = require('chai'),
-    chaiHttp = require('chai-http');
-var expect = chai.expect;
-chai.use(chaiHttp);
+'use-strict'
+let assert = require('assert'),
+    request = require('supertest');
 
-it('user sign up', function() {
-    chai.request('localhost:3000').post('/v1/signup').send({email: 'a@a.com', passwd: '123'}).end(function(err, res) {
-        expect(err).to.be.null;
-        expect(res).to.have.status(200);
-        expect(req).to.have.header('Authorization', /^Bearer */);
-    });
+request = request('http://localhost:3000/v1');
+it('user sign up', function(done) {
+    request.post('/signup').send({email: 'a@a.com', passwd: '123'}).expect(res => {
+        assert.equal(res.body[0].email, "a@a.com")
+    }).expect(200, done);
 });
 
-it('user sign in', function() {
-    chai.request('localhost:3000').post('/v1/signin').send({email: 'a@a.com', passwd: '123'}).end(function(err, res) {
-        expect(err).to.be.null;
-        expect(res).to.have.status(200);
-    });
-
+it('user sign in', function(done) {
+    request.post('/signin').send({email: 'a@a.com', passwd: '123'}).expect(200, done);
 });
