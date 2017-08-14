@@ -13,3 +13,8 @@ curl -i localhost:3000/v1/signin -d '{ "email":"ab@mail.com","passwd":"abc"}' -X
 # get all user:
 
 curl -i localhost:3000/v1/users -X GET -H 'Content-Type:application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJjQGdtYWlsLmNvbSIsImlhdCI6MTQ5NjA1Nzk0NH0.q8rdGb5VMCgwAJJzgxmYecj3O-oBO9uH_D_I54MiNNU'
+
+https://github.com/MaximAbramchuck/awesome-interview-questions#nodejs
+
+https://www.vskills.in/practice/startPracticeTest/Node-JS-Mock-Test
+http://www.expertrating.com/certifications/Node-js-Test.asp
