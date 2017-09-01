@@ -1,0 +1,13 @@
+interval environment commandToRun > outOfservice 2>&1
+
+run script in every 15 minute
+
+*/15 * * * * NODE_ENV=dev /home/developer/.nvm/versions/node/v8.4.0/bin/node /home/developer/payment-service/csvmail.js  >> /tmp/payments/csvmail.log 2>&1
+
+if you want to run via node:
+    find node path ---- which node this is come like /home/developer/.nvm/versions/node/v8.4.0/bin/node
+if any time you update node version then you above file also
+
+
+run at night 2 o clock:
+* 2 * * *
