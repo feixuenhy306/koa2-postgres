@@ -10,4 +10,7 @@ if any time you update node version then you above file also
 
 
 run at night 2 o clock:
-* 2 * * *
+0 2 * * *
+
+
+* 2 * * *  its run after every 2 minute

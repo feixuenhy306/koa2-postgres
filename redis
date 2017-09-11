@@ -1,0 +1,9 @@
+client.expire('key1', 30);
+redis.set('key', 100, 'ex', 10)
+
+If you want to expire it 24 hrs later
+client.expireat(key, parseInt((+new Date)/1000) + 86400);
+Or
+if you want it to expire exactly at the end of today, you can use .setHours on a new Date() object to get the time at the end of the day, and use that.
+var todayEnd = new Date().setHours(23, 59, 59, 999);
+client.expireat(key, parseInt(todayEnd/1000))

@@ -1,0 +1,28 @@
+change commit msg:
+
+git commit --amend
+update msg
+git push --force origin PAY-16
+
+when git ignore not working
+git rm -r --cached .
+git add .
+git commit -m "fixed untracked files"
+
+
+You have not concluded your merge (MERGE_HEAD exists).
+Please, commit your changes before you can merge.
+1.
+git merge --abort [Since git version 1.7.4]
+git reset --merge
+2) Resolve the conflict.
+3) Don't forget to add and commit the merge.
+4) git pull
+
+
+git stash list:
+
+
+git stash Content
+git stash show -p -- most recent
+git stash show -p stash@{1}
