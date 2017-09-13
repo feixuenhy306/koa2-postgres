@@ -26,3 +26,19 @@ git stash list:
 git stash Content
 git stash show -p -- most recent
 git stash show -p stash@{1}
+
+
+change branch name
+if you are on branch which name will be changed
+git branch -m newName
+
+
+otherWise:
+#rename the local branch to the new name
+git branch -m old_name new_name
+
+#delete the old branch on remote - where <remote> is eg. origin
+git push <remote> --delete old_name
+
+#push the new branch to remote
+git push <remote> new_name
