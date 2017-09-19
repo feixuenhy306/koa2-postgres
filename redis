@@ -1,4 +1,4 @@
-client.expire('key1', 30);
+redisClient.expire('key1', 30);
 redis.set('key', 100, 'ex', 10)
 
 If you want to expire it 24 hrs later
@@ -7,3 +7,24 @@ Or
 if you want it to expire exactly at the end of today, you can use .setHours on a new Date() object to get the time at the end of the day, and use that.
 var todayEnd = new Date().setHours(23, 59, 59, 999);
 client.expireat(key, parseInt(todayEnd/1000))
+
+
+redis>  SET mykey "Hello"
+
+"OK"
+
+redis>  EXPIRE mykey 10
+
+(integer) 1
+
+redis>  TTL mykey
+
+(integer) 10
+
+redis>  SET mykey "Hello World"
+
+"OK"
+
+redis>  TTL mykey
+
+(integer) -1

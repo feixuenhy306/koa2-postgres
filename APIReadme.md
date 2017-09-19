@@ -19,4 +19,8 @@ https://github.com/MaximAbramchuck/awesome-interview-questions#nodejs
 https://www.vskills.in/practice/startPracticeTest/Node-JS-Mock-Test
 http://www.expertrating.com/certifications/Node-js-Test.asp
 
-http://es6-features.org/#RestParameter 
+http://es6-features.org/#RestParameter
+
+https://www.linkedin.com/in/miguellgt
+
+http://www.geeksforgeeks.org/?p=138711&preview=true
