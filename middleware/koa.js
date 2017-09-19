@@ -25,9 +25,14 @@ app.use(cors(config.app.cors))
         await next();
     }).use(bodyParser()).use(pubRouter.routes()).use(pubRouter.allowedMethods())
     .use(jwt({secret: publicKey, algorithms: ['RS256']}))
+    .use(async(ctx,next)=>{
+        console.log('\n\n\n\n\n',ctx.state.user);
+        await next();
+    })
     .use(securedRouter.routes()).use(securedRouter.allowedMethods())
     .use(async(ctx, next) => {
         ctx.body = 'Invalid URL!!!';
     });
 
-app.listen(port, () => console.log(`Server listening on port: ${port}`));
+//app.listen(port, () => console.log(`Server listening on port: ${port}`));
+exports.app = app;

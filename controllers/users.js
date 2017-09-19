@@ -52,7 +52,7 @@ async function signUp(ctx, next) {
             var cert = fs.readFileSync(config.app.privateKey)
             ctx.set('Authorization', " Bearer " + jsonwebtoken.sign({
                 email: email
-            }, cert, {algorithm: 'RS256'}));
+            }, cert, {algorithm: 'RS256', expiresIn:50}));
 
             ctx.status = 200;
         } else {

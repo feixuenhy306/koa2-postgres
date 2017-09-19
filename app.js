@@ -8,14 +8,31 @@ let config = require('./config'),
     rabbitMQ = require('./rabbitmq'),
     numCPUs = require('os').cpus().length,
     pino = require('pino')(),
-    cluster = require('cluster');
+    cluster = require('cluster'),
+    http = require('https'),
+    fs = require('fs');
 
 if (cluster.isMaster) {
+    options = {
+        key: fs.readFileSync('key.pem'),
+        cert: fs.readFileSync('key-cert.pem')
+    };
     for (var i = 0; i < 1; i++) {
         cluster.fork();
     }
 } else {
-    require('./middleware/koa');
+    let koa = require('./middleware/koa');
+    var options;
+    options = {
+        key: fs.readFileSync('key.pem'),
+        cert: fs.readFileSync('key-cert.pem')
+    };
+
+    // http.createServer(options, function(req, res) {
+    //     res.writeHead(200);
+    //     res.end("hello world\n");
+    // }).listen(4444);
+    http.createServer(options, koa.app.callback()).listen(3000);
 }
 
 serverConfiguration();
@@ -27,10 +44,10 @@ async function serverConfiguration() {
 
 process.on('uncaughtException', function(err) {
     pino.error("uncaughtException", err);
-    email.sendToAdmin(err);
+    //email.sendToAdmin(err);
 
 }).on('uncaughtRejection', function(err) {
 
     pino.error("uncaughtRejection: ", err);
-    email.sendToAdmin(err);
+    //email.sendToAdmin(err);
 })
