@@ -24,3 +24,6 @@ http://es6-features.org/#RestParameter
 https://www.linkedin.com/in/miguellgt
 
 http://www.geeksforgeeks.org/?p=138711&preview=true
+
+read kue:
+https://blog.jscrambler.com/queue-jobs-kue/
